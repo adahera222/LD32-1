@@ -43,7 +43,7 @@
 	<BASEBALLBAT_NAME>Baseball Bat</BASEBALLBAT_NAME>
 	<BASEBALLBAT_WEIGH>33 ounces! That's oddly specific..</BASEBALLBAT_WEIGH>
 	<BASEBALLBAT_SHAKE>Some wood is bouncing around in there.</BASEBALLBAT_SHAKE>
-	<BASEBALL_HINT>Swing for the fences kid.</BASEBALL_HINT>
+	<BASEBALLBAT_HINT>Swing for the fences kid.</BASEBALLBAT_HINT>
 
 	<UMBRELLA_NAME>Umbrella</UMBRELLA_NAME>
 	<UMBRELLA_WEIGH>For a package this size.. it's light!</UMBRELLA_WEIGH>

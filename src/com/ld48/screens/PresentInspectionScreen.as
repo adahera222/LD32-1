@@ -9,6 +9,7 @@ package com.ld48.screens
 	import com.ld48.ScreenManager;
 	import com.ld48.MathHelper;
 	import com.ld48.Toy;
+	import com.ld48.SoundManager;
 	
 	import fl.motion.Tweenables;
 	
@@ -110,8 +111,6 @@ package com.ld48.screens
 			xRayTweenOn.addEventListener(TweenEvent.MOTION_FINISH, onXRayTweenComplete);
 			var presentAlphaTween:Tween = new Tween(_presentMC.box, "alpha", Strong.easeOut, 1.0, 0.5, 1.5, true);
 			
-			//TODO:: SILHOEUTTE TOY BEHIND PRESENT
-			
 			updateCounters();
 		}
 		
@@ -145,6 +144,8 @@ package com.ld48.screens
 			var tweenY:Tween = new Tween(_presentMC, "y", None.easeNone, _presentMC.y, _presentMC.y+MathHelper.RandomInt( -MAX_SHAKE_VARIANCE, MAX_SHAKE_VARIANCE), SHAKE_TIME, true);
 			
 			var tweenRot:Tween = new Tween(_presentMC, "rotation", None.easeNone, _presentMC.rotation, MathHelper.RandomInt( -MAX_SHAKE_ROT, MAX_SHAKE_ROT), SHAKE_TIME, true);
+			
+			
 		}
 		
 		private function shakeTowardsCenter():void
@@ -152,6 +153,7 @@ package com.ld48.screens
 			var tweenX:Tween = new Tween(_presentMC, "x", None.easeNone, _presentMC.x, 0, SHAKE_TIME, true);
 			var tweenY:Tween = new Tween(_presentMC, "y", None.easeNone, _presentMC.y, _presentMC.height / 2, SHAKE_TIME, true);
 			var tweenRot:Tween = new Tween(_presentMC, "rotation", None.easeNone, _presentMC.rotation, 0, SHAKE_TIME, true);
+			SoundManager.instance.playSFX("ShakeSFX");
 		}
 		
 		private function onShakeComplete():void
@@ -181,6 +183,7 @@ package com.ld48.screens
 				presentFallTween = null;
 				presentFallTween = new Tween(_presentMC, "y", None.easeNone, -_presentMC.height, 0, 0.25, true);
 				presentFallTween.addEventListener(TweenEvent.MOTION_FINISH, onPresentFallTweenComplete);
+				SoundManager.instance.playSFX("OnScaleSFX");
 			}, 500);
 			updateCounters();	
 		}
@@ -268,6 +271,7 @@ package com.ld48.screens
 		
 		public function hideClueButtons():void
 		{
+			SoundManager.instance.playSFX("XRaySFX");
 			_canClickButtons = false;
 			
 			hideXRayTimeout = setTimeout(function():void 
@@ -317,6 +321,7 @@ package com.ld48.screens
 		
 		public function showClueButtons():void
 		{
+			SoundManager.instance.playSFX("XRaySFX");
 			_canClickButtons = true;
 			showXRayTimeout = setTimeout(function():void 
 			{ 
@@ -359,9 +364,10 @@ package com.ld48.screens
 		}
 		private var openedCorrectPresent:Boolean = false;
 		private var openedIncorrectPresent:Boolean = false;
+		private var openPresentBoxTween:Tween;
 		public function openPresent():void
 		{
-			var boxTween:Tween = new Tween(_presentMC.box, "y", Strong.easeIn, _presentMC.box.y, -Main.HEIGHT * 2, 0.35, true);
+			openPresentBoxTween = new Tween(_presentMC.box, "y", Strong.easeIn, _presentMC.box.y, -Main.HEIGHT * 2, 0.35, true);
 			
 			if (_present.toy == GameManager.instance.currentDesiredToy)
 			{
@@ -375,7 +381,9 @@ package com.ld48.screens
 				var burstTweenY:Tween = new Tween(rotatingBurst, "scaleY", None.easeNone, 0, 1, 0.25, true);
 				presentLayer.addChildAt(rotatingBurst, 0);
 				
-				showDialogue(Main.strings["CORRECT_PRESENT_"+MathHelper.RandomInt(1,9)]);
+				showDialogue(Main.strings["CORRECT_PRESENT_" + MathHelper.RandomInt(1, 9)]);
+				
+				SoundManager.instance.playSFX("CorrectPresent");
 				//ScreenManager.instance.gotoScreen(new GameplayScreen(), true);
 			}
 			else
@@ -395,6 +403,7 @@ package com.ld48.screens
 		
 		private var xRayTweenOff:Tween;
 		private var scaleTweenOff:Tween;
+		private var openPresentTimeout:uint;
 		override public function onButtonClicked(buttonName:String):void
 		{
 			super.onButtonClicked(buttonName);
@@ -412,7 +421,7 @@ package com.ld48.screens
 				{
 					if (!_canClickButtons) return;
 					hideClueButtons();
-					var openPresentTimeout:uint = setTimeout(openPresent,500);
+					openPresentTimeout = setTimeout(openPresent,500);
 					break;
 				}
 					

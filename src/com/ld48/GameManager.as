@@ -84,9 +84,10 @@ package com.ld48
 			
 			for (var i:int = 0; i < TOTAL_NUM_PRESENTS; i++)
 			{
-				var present:Present = new Present(GameManager.instance.getControlledRandomPresentClass(), GameManager.instance.getRandomPresentColor(), "", i);
-				var toy:Toy = getRandomToyForType(present.type);
-				present.toy = toy.name;
+				var type:String = GameManager.instance.getControlledRandomPresentClass();
+				var color:String = GameManager.instance.getControlledRandomColorForType(type);
+				var toy:Toy = getRandomToyForType(type);
+				var present:Present = new Present(type, color, toy.name, i);
 				present.weighRotation = toy.weighRotationAmount;
 				availableToys.splice(availableToys.indexOf(toy), 1);
 				addPresent(present);
@@ -134,6 +135,26 @@ package com.ld48
 				_currentDesiredToy = getRandomUnopenedToy();
 			else
 				trace("game win!");
+		}
+		
+		public function getControlledRandomColorForType(type:String):String
+		{
+			var redAvailable:Boolean = shouldColorStillBeChosenForType(type, Present.COLOR_RED);
+			var blueAvailable:Boolean = shouldColorStillBeChosenForType(type, Present.COLOR_BLUE);
+			var greenAvailable:Boolean = shouldColorStillBeChosenForType(type, Present.COLOR_GREEN);
+			var yellowAvailable:Boolean = shouldColorStillBeChosenForType(type, Present.COLOR_YELLOW);
+			
+			var colors:Vector.<String> = new Vector.<String>();
+			if (redAvailable)
+				colors.push(Present.COLOR_RED);
+			if (blueAvailable)
+				colors.push(Present.COLOR_BLUE);
+			if (greenAvailable)
+				colors.push(Present.COLOR_GREEN);
+			if (yellowAvailable)
+				colors.push(Present.COLOR_YELLOW);
+				
+			return colors[MathHelper.RandomInt(0, colors.length - 1)];
 		}
 		
 		public function getControlledRandomPresentClass():String
@@ -240,6 +261,17 @@ package com.ld48
 		public function shouldTypeStillBeChosen(type:String):Boolean
 		{
 			return (getNumOfUnopenedPresentsOfType(type) != MAX_NUM_TOYS_PER_TYPE);
+		}
+		
+		public function shouldColorStillBeChosenForType(type:String, color:String):Boolean
+		{
+			for (var i:int = 0; i < _presents.length; i++)
+			{
+				if (_presents[i].type == type && _presents[i].color == color)
+					return false;
+			}
+			
+			return true;
 		}
 		
 		

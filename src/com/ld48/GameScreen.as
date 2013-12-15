@@ -99,6 +99,7 @@ package com.ld48
 		public function onButtonClicked(buttonName:String):void
 		{
 			//override me
+			SoundManager.instance.playSFX("ButtonClick");
 		}
 		
 		private function onEnterFrame(e:Event):void

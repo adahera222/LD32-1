@@ -81,7 +81,7 @@ package com.ld48.screens
 				homeButton.visible = true;
 				homeButton.textField.htmlText = "To Title";
 				addButton(homeButton);
-				dialogueBox.textField.htmlText = "<font color='#FF3668'>Christmas is saved!</font> You opened all your presents!";
+				dialogueBox.textField.htmlText = "<font color='#FF3668'>Christmas is saved!</font> You opened all your presents! Congratulations!";
 			}
 			else
 			{
