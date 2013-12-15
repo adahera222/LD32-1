@@ -1,0 +1,7 @@
+README
+
+This game was made for Ludum Dare #28, a 48 hour game jam. The theme was 'You only get one'.
+
+Play at: http://matthewvroman.com/dev/ld28/index.html
+
+Important! This is the ugliest code I have ever written. Only the bravest souls may enter into perilous classes such as PresentInspectScreen.as and GameManager.as. You've been warned. 
