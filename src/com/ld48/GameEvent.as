@@ -10,6 +10,8 @@ package com.ld48
 		public static const USED_WEIGH:String = "OnWeightUsed";
 		public static const USED_HINT:String = "OnHintUsed";
 		
+		public static const PRESENT_OPENED:String = "OnPresentOpened";
+		
 		public var data:*;
 		
 		public function GameEvent(type:String=GameEvent.DEFAULT_GAME_EVENT, eventData:*=null, bubbles:Boolean=false, cancelable:Boolean=false):void
