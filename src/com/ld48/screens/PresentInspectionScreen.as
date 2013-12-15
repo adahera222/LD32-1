@@ -77,6 +77,11 @@ package com.ld48.screens
 			addButton(selectButton);
 			addButton(inspectDialogue.dismissDialogueButton);
 			
+			xRayButton.icon.gotoAndStop(1);
+			shakeButton.icon.gotoAndStop(2);
+			weighButton.icon.gotoAndStop(3);
+			hintButton.icon.gotoAndStop(4);
+			
 			updateCounters();
 			
 			hideDialogue();
