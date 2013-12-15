@@ -8,6 +8,8 @@ package com.ld48.screens
 	import com.ld48.Present;
 	import com.ld48.ScreenManager;
 	import com.ld48.MathHelper;
+	import com.ld48.Toy;
+	
 	import fl.motion.Tweenables;
 	
 	import flash.display.MovieClip;
@@ -64,8 +66,6 @@ package com.ld48.screens
 			
 			_presentMC.toyLayer.addChild(Helper.getMovieClipFromLibrary(_present.toy));
 			
-			//TODO: add toy to toy layer
-			
 			presentLayer.addChild(_presentMC);
 			
 			addButton(xRayButton);
@@ -93,6 +93,7 @@ package com.ld48.screens
 			hintButton.counter.textField.text = GameManager.instance.numHintsLeft.toString();
 		}
 		
+		private var xRayTweenOn:Tween;
 		public function useXRay():void
 		{
 			if(GameManager.instance.numXRaysLeft<=0 || !_canClickButtons) return;
@@ -105,8 +106,8 @@ package com.ld48.screens
 			
 			effectLayer.addChild(_xRayMC);
 			
-			var tween:Tween = new Tween(_xRayMC, "y", Elastic.easeOut, Main.HEIGHT, 0, 1.5, true);
-			tween.addEventListener(TweenEvent.MOTION_FINISH, onXRayTweenComplete);
+			xRayTweenOn = new Tween(_xRayMC, "y", Elastic.easeOut, Main.HEIGHT, 0, 1.5, true);
+			xRayTweenOn.addEventListener(TweenEvent.MOTION_FINISH, onXRayTweenComplete);
 			var presentAlphaTween:Tween = new Tween(_presentMC.box, "alpha", Strong.easeOut, 1.0, 0.5, 1.5, true);
 			
 			//TODO:: SILHOEUTTE TOY BEHIND PRESENT
@@ -116,7 +117,9 @@ package com.ld48.screens
 		
 		private function onXRayTweenComplete(e:TweenEvent):void
 		{
-			showDialogue("Used an xray!");
+			xRayTweenOn.removeEventListener(TweenEvent.MOTION_FINISH, onXRayTweenComplete);
+			xRayTweenOn = null;
+			showDialogue(Main.strings["XRAY_"+MathHelper.RandomInt(1,6).toString()]);
 		}
 		
 		public function useShake():void
@@ -129,10 +132,10 @@ package com.ld48.screens
 			
 			for (var i:int = 0; i < NUM_SHAKES_PER_USE; i++)
 			{
-				setTimeout(shakeAwayFromCenter, 1000 * SHAKE_TIME * (i));
-				setTimeout(shakeTowardsCenter, 1000 * SHAKE_TIME * (i+1));
+				var shakeAway:uint = setTimeout(shakeAwayFromCenter, 1000 * SHAKE_TIME * (i));
+				var shakeTowards:uint = setTimeout(shakeTowardsCenter, 1000 * SHAKE_TIME * (i+1));
 			}
-			setTimeout(onShakeComplete, 1000 * SHAKE_TIME * NUM_SHAKES_PER_USE);
+			var shakeComplete:uint = setTimeout(onShakeComplete, 1000 * SHAKE_TIME * NUM_SHAKES_PER_USE);
 			updateCounters();
 		}
 
@@ -153,10 +156,11 @@ package com.ld48.screens
 		
 		private function onShakeComplete():void
 		{
-			showDialogue("We just shook the box!!!!!");
+			showDialogue(Toy.getShakeTextForToy(_present.toy));
 			//showClueButtons();
 		}
 		
+		private var presentFallTween:Tween;
 		public function useWeigh():void
 		{
 			if(GameManager.instance.numWeighsLeft<=0 || !_canClickButtons) return;
@@ -172,28 +176,33 @@ package com.ld48.screens
 			
 			var presentTween:Tween = new Tween(_presentMC, "y", None.easeNone, _presentMC.y, -_presentMC.height, 0.25, true);
 			
-			setTimeout(function():void
+			var weighPresentTimeout:uint = setTimeout(function():void
 			{
-				var presentTween:Tween = new Tween(_presentMC, "y", None.easeNone, -_presentMC.height, 0, 0.25, true);
-				presentTween.addEventListener(TweenEvent.MOTION_FINISH, onPresentFallTweenComplete);
+				presentFallTween = null;
+				presentFallTween = new Tween(_presentMC, "y", None.easeNone, -_presentMC.height, 0, 0.25, true);
+				presentFallTween.addEventListener(TweenEvent.MOTION_FINISH, onPresentFallTweenComplete);
 			}, 500);
 			updateCounters();	
 		}
 		
+		private var needleTween:Tween;
 		private function onPresentFallTweenComplete(e:TweenEvent):void
 		{
+			presentFallTween.removeEventListener(TweenEvent.MOTION_FINISH, onPresentFallTweenComplete);
 			var downAmount:Number = 15;
 			var scaleTween:Tween = new Tween(_scaleMC.top, "y", Strong.easeOut, _scaleMC.top.y, _scaleMC.top.y + downAmount, 0.15, true);
 			
 			var presentTween:Tween = new Tween(_presentMC, "y", Strong.easeOut, _presentMC.y, _presentMC.y + downAmount, 0.15, true);
 			
-			var needleTween:Tween = new Tween(_scaleMC.needle, "rotation", Strong.easeOut, 0, 180, 1.5, true);
+			needleTween = null;
+			needleTween = new Tween(_scaleMC.needle, "rotation", Strong.easeOut, 0, _present.weighRotation, 1.5, true);
 			needleTween.addEventListener(TweenEvent.MOTION_FINISH, onNeedleFinished);
 		}
 		
 		private function onNeedleFinished(e:TweenEvent):void
 		{
-			showDialogue("We just weighed something!!!");
+			needleTween.removeEventListener(TweenEvent.MOTION_FINISH, onNeedleFinished);
+			showDialogue(Toy.getWeighTextForToy(_present.toy));
 		}
 		
 		public function useHint():void
@@ -204,7 +213,7 @@ package com.ld48.screens
 			
 			GameEventDispatcher.dispatchEvent(new GameEvent(GameEvent.USED_HINT));
 			
-			setTimeout(function():void { showDialogue("This is a hint about what's in the box :D"); }, 500 );
+			var showDialogueFromHintTimeout:uint = setTimeout(function():void { showDialogue(Toy.getHintTextForToy(_present.toy)); }, 500 );
 			
 			updateCounters();
 		}
@@ -243,42 +252,99 @@ package com.ld48.screens
 			
 		}
 		
+		private var hideXRayButtonTween:Tween;
+		private var hideShakeButtonTween:Tween;
+		private var hideWeighButtonTween:Tween;
+		private var hideHintButtonTween:Tween;
+		private var hideBackButtonTween:Tween;
+		private var hideSelectButtonTween:Tween;
+		
+		private var hideXRayTimeout:uint;
+		private var hideShakeTimeout:uint;
+		private var hideWeighTimeout:uint;
+		private var hideHintTimeout:uint;
+		private var hideBackTimeout:uint;
+		private var hideSelectTimeout:uint;
+		
 		public function hideClueButtons():void
 		{
 			_canClickButtons = false;
 			
-			setTimeout(function():void { hideClueButton(xRayButton); }, 1000 * 0.0);
-			setTimeout(function():void { hideClueButton(shakeButton); }, 1000 * 0.05);
-			setTimeout(function():void { hideClueButton(weighButton); }, 1000 * 0.10);
-			setTimeout(function():void { hideClueButton(hintButton); }, 1000 * 0.15);
-			
-			setTimeout(function():void 
+			hideXRayTimeout = setTimeout(function():void 
 			{ 
-				var bTween:Tween = new Tween(backButton, "y", Strong.easeIn, backButton.y, -100, 0.35, true);
+				hideXRayButtonTween = new Tween(xRayButton, "y", Strong.easeIn, xRayButton.y, Main.HEIGHT+xRayButton.height, 0.35, true);
+			}, 1000 * 0.0);
+			
+			hideShakeTimeout = setTimeout(function():void 
+			{ 
+				hideShakeButtonTween = new Tween(shakeButton, "y", Strong.easeIn, shakeButton.y, Main.HEIGHT+shakeButton.height, 0.35, true);
+			}, 1000 * 0.05);
+			
+			hideWeighTimeout = setTimeout(function():void 
+			{ 
+				hideWeighButtonTween = new Tween(weighButton, "y", Strong.easeIn, weighButton.y, Main.HEIGHT+weighButton.height, 0.35, true);
+			}, 1000 * 0.10);
+			
+			hideHintTimeout = setTimeout(function():void 
+			{ 
+				hideHintButtonTween = new Tween(hintButton, "y", Strong.easeIn, hintButton.y, Main.HEIGHT+hintButton.height, 0.35, true);
+			}, 1000 * 0.15);
+			
+			hideBackTimeout = setTimeout(function():void 
+			{ 
+				hideBackButtonTween = new Tween(backButton, "y", Strong.easeIn, backButton.y, -100, 0.35, true);
 			}, 1000 * 0.015);
 			
-			setTimeout(function():void 
+			hideSelectTimeout = setTimeout(function():void 
 			{ 
-				var sTween:Tween = new Tween(selectButton, "y", Strong.easeIn, selectButton.y, -100, 0.35, true);
+				hideSelectButtonTween = new Tween(selectButton, "y", Strong.easeIn, selectButton.y, -100, 0.35, true);
 			}, 1000 * 0.035);
 		}
+		
+		private var showXRayButtonTween:Tween;
+		private var showShakeButtonTween:Tween;
+		private var showWeighButtonTween:Tween;
+		private var showHintButtonTween:Tween;
+		private var showBackButtonTween:Tween;
+		private var showSelectButtonTween:Tween;
+		
+		private var showXRayTimeout:uint;
+		private var showShakeTimeout:uint;
+		private var showWeighTimeout:uint;
+		private var showHintTimeout:uint;
+		private var showBackTimeout:uint;
+		private var showSelectTimeout:uint;
 		
 		public function showClueButtons():void
 		{
 			_canClickButtons = true;
-			setTimeout(function():void { showClueButton(xRayButton); }, 1000 * 0.0);
-			setTimeout(function():void { showClueButton(shakeButton); }, 1000 * 0.05);
-			setTimeout(function():void { showClueButton(weighButton); }, 1000 * 0.10);
-			setTimeout(function():void { showClueButton(hintButton); }, 1000 * 0.15);
-			
-			setTimeout(function():void 
+			showXRayTimeout = setTimeout(function():void 
 			{ 
-				var bTween:Tween = new Tween(backButton, "y", Strong.easeOut, backButton.y, 11.95, 0.35, true);
+				showXRayButtonTween = new Tween(xRayButton, "y", Strong.easeOut, xRayButton.y, 456, 0.35, true);
+			}, 1000 * 0.0);
+			
+			showShakeTimeout = setTimeout(function():void 
+			{ 
+				showShakeButtonTween = new Tween(shakeButton, "y", Strong.easeOut, shakeButton.y, 456, 0.35, true);
+			}, 1000 * 0.05);
+			
+			showWeighTimeout = setTimeout(function():void 
+			{ 
+				showWeighButtonTween = new Tween(weighButton, "y", Strong.easeOut, weighButton.y, 456, 0.35, true);
+			}, 1000 * 0.10);
+			showHintTimeout = setTimeout(function():void 
+			{ 
+				showHintButtonTween = new Tween(hintButton, "y", Strong.easeOut, hintButton.y, 456, 0.35, true);
+			}, 1000 * 0.15);
+			
+			showBackTimeout = setTimeout(function():void 
+			{ 
+				showBackButtonTween = new Tween(backButton, "y", Strong.easeOut, backButton.y, 11.95, 0.35, true);
 			}, 1000 * 0.015);
 			
-			setTimeout(function():void 
+			showSelectTimeout = setTimeout(function():void 
 			{ 
-				var sTween:Tween = new Tween(selectButton, "y", Strong.easeOut, selectButton.y, 11.95, 0.35, true);
+				showSelectButtonTween = new Tween(selectButton, "y", Strong.easeOut, selectButton.y, 11.95, 0.35, true);
 			}, 1000 * 0.035);
 		}
 		
@@ -309,14 +375,14 @@ package com.ld48.screens
 				var burstTweenY:Tween = new Tween(rotatingBurst, "scaleY", None.easeNone, 0, 1, 0.25, true);
 				presentLayer.addChildAt(rotatingBurst, 0);
 				
-				showDialogue("Congrats!");
+				showDialogue(Main.strings["CORRECT_PRESENT_"+MathHelper.RandomInt(1,9)]);
 				//ScreenManager.instance.gotoScreen(new GameplayScreen(), true);
 			}
 			else
 			{
 				openedIncorrectPresent = true;
 				//INCORRECT
-				showDialogue("Bwahahaha. Not even close kid. Better luck next year!");
+				showDialogue(Main.strings["INCORRECT_PRESENT_"+MathHelper.RandomInt(1,4)]);
 				tryAgainButton.visible = true;
 				mainMenuButton.visible = true;
 				inspectDialogue.dismissDialogueButton.visible = false;
@@ -327,6 +393,8 @@ package com.ld48.screens
 			}
 		}
 		
+		private var xRayTweenOff:Tween;
+		private var scaleTweenOff:Tween;
 		override public function onButtonClicked(buttonName:String):void
 		{
 			super.onButtonClicked(buttonName);
@@ -344,7 +412,7 @@ package com.ld48.screens
 				{
 					if (!_canClickButtons) return;
 					hideClueButtons();
-					setTimeout(openPresent,500);
+					var openPresentTimeout:uint = setTimeout(openPresent,500);
 					break;
 				}
 					
@@ -374,7 +442,6 @@ package com.ld48.screens
 				
 				case "tryAgainButton":
 				{
-					trace("TRY AGAIN CLICKED");
 					GameManager.instance.resetGameplay();
 					ScreenManager.instance.gotoScreen(new GameplayScreen(), true);
 					break;
@@ -395,6 +462,7 @@ package com.ld48.screens
 						if (GameManager.instance.numPresentsOpened == GameManager.TOTAL_NUM_PRESENTS)
 						{
 							//game win!!
+							ScreenManager.instance.gotoScreen(new GameplayScreen(), true);
 						}
 						else
 						{
@@ -408,14 +476,14 @@ package com.ld48.screens
 					}
 					else if (_xRayMC != null)
 					{
-						var tween:Tween = new Tween(_xRayMC, "y", None.easeNone, _xRayMC.y, Main.HEIGHT, 0.25, true);
-						tween.addEventListener(TweenEvent.MOTION_FINISH, onXRayMovedOffscreen);
+						xRayTweenOff = new Tween(_xRayMC, "y", None.easeNone, _xRayMC.y, Main.HEIGHT, 0.25, true);
+						xRayTweenOff.addEventListener(TweenEvent.MOTION_FINISH, onXRayMovedOffscreen);
 						var alphaTween:Tween = new Tween(_presentMC.box, "alpha", Strong.easeOut, 0.5, 1.0, 0.15, true);
 					}
 					else if (_scaleMC != null)
 					{
-						var sTween:Tween = new Tween(_scaleMC, "y", None.easeNone, _scaleMC.y, Main.HEIGHT, 0.25, true);
-						sTween.addEventListener(TweenEvent.MOTION_FINISH, onScaleMovedOffscreen);
+						scaleTweenOff = new Tween(_scaleMC, "y", None.easeNone, _scaleMC.y, Main.HEIGHT, 0.25, true);
+						scaleTweenOff.addEventListener(TweenEvent.MOTION_FINISH, onScaleMovedOffscreen);
 						
 						var presentTween:Tween = new Tween(_presentMC, "y", None.easeNone, _presentMC.y, _presentMC.height / 2, 0.15, true);
 					}
@@ -432,6 +500,9 @@ package com.ld48.screens
 		
 		private function onXRayMovedOffscreen(e:TweenEvent):void
 		{
+			xRayTweenOff.removeEventListener(TweenEvent.MOTION_FINISH, onXRayMovedOffscreen);
+			xRayTweenOff = null;
+			
 			_xRayMC.parent.removeChild(_xRayMC);
 			_xRayMC = null;
 			hideDialogue();
@@ -440,6 +511,8 @@ package com.ld48.screens
 		
 		private function onScaleMovedOffscreen(e:TweenEvent):void
 		{
+			scaleTweenOff.removeEventListener(TweenEvent.MOTION_FINISH, onScaleMovedOffscreen);
+			scaleTweenOff = null;
 			_scaleMC.parent.removeChild(_scaleMC);
 			_scaleMC = null;
 			hideDialogue();

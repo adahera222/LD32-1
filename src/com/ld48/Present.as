@@ -6,6 +6,8 @@ package com.ld48
 		public var type:String;
 		public var toy:String;
 		
+		public var weighRotation:Number;
+		
 		public var holderIndex:int;
 		
 		public var isOpened:Boolean = false;
@@ -31,19 +33,19 @@ package com.ld48
 			holderIndex=_holderIndex;
 		}
 		
-		public static function getWeightStringForToy(_toy:String):String
+		public function get weighString():String
 		{
-			return "";
+			return Toy.getWeighTextForToy(toy);
 		}
 		
-		public static function getShakeStringForToy(_toy:String):String
+		public function get shakeString():String
 		{
-			return "";
+			return Toy.getShakeTextForToy(toy);
 		}
 		
-		public static function getHintStringForToy(_toy:String):String
+		public function get hintString():String
 		{
-			return "";
+			return Toy.getHintTextForToy(toy);
 		}
 		
 		public static function getRandomToyForType(_type:String):String

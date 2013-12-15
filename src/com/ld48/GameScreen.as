@@ -4,7 +4,7 @@ package com.ld48
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.KeyboardEvent;
-	
+	import flash.system.System;
 	/**
 	 * ...
 	 * @author Matt
@@ -145,6 +145,7 @@ package com.ld48
 			{
 				parent.removeChild(this);
 			}
+			System.gc();
 			trace("GameScreen::destroy");
 		}
 		

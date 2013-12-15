@@ -5,6 +5,8 @@ package com.ld48.screens
 	import com.ld48.Helper;
 	import com.ld48.Present;
 	import com.ld48.ScreenManager;
+	import com.ld48.Toy;
+	
 	import fl.transitions.Tween;
 	import fl.transitions.easing.None;
 	import flash.events.MouseEvent;
@@ -25,11 +27,15 @@ package com.ld48.screens
 		public var presentHolder7:MovieClip;
 		public var presentHolder8:MovieClip;
 		
+		public var homeButton:MovieClip;
+		
 		private var holders:Vector.<MovieClip>;
 		
 		public function GameplayScreen()
 		{
 			super();
+			
+			homeButton.visible = false;
 			
 			holders = new Vector.<MovieClip>();
 			holders.push(presentHolder1);
@@ -47,6 +53,11 @@ package com.ld48.screens
 				if (present == null)
 				{
 					present = GameManager.instance.getOpenedPresentAtIndex(i);
+					var toy:MovieClip = Helper.getMovieClipFromLibrary(present.toy);
+					holders[i].addChild(toy);
+					toy.scaleX = toy.scaleY = 0.5;
+					toy.y = -toy.height / 2;
+				
 				}
 				if (!present.isOpened)
 				{
@@ -58,10 +69,6 @@ package com.ld48.screens
 					holders[i].addEventListener(MouseEvent.MOUSE_OVER, onMouseOverHolder);
 					holders[i].addEventListener(MouseEvent.MOUSE_OUT, onMouseOutHolder);
 				}
-				else
-				{
-					//show toy
-				}
 			}
 			
 			updateHud();
@@ -69,7 +76,18 @@ package com.ld48.screens
 		
 		private function updateHud():void
 		{
-			dialogueBox.textField.htmlText = "Why don't you pick out the <font color='#FF3668'>" + GameManager.instance.currentDesiredToy + "</font> this time!";
+			if (GameManager.instance.gameWon())
+			{
+				homeButton.visible = true;
+				homeButton.textField.htmlText = "To Title";
+				addButton(homeButton);
+				dialogueBox.textField.htmlText = "<font color='#FF3668'>Christmas is saved!</font> You opened all your presents!";
+			}
+			else
+			{
+				hud.rotatingBurst.visible = false;
+				dialogueBox.textField.htmlText = "Why don't you pick out the <font color='#FF3668'>" + Toy.getStringNameForToy(GameManager.instance.currentDesiredToy) + "</font> this time!";
+			}
 			hud.presentCount.htmlText = GameManager.instance.numPresentsOpened + "/" + GameManager.TOTAL_NUM_PRESENTS;
 		}
 		
@@ -97,6 +115,12 @@ package com.ld48.screens
 				
 				var present:Present = GameManager.instance.getAvailablePresentAtIndex(buttonNum-1);
 				ScreenManager.instance.gotoScreen(new PresentInspectionScreen(present),true);
+			}
+			
+			if (buttonName == "homeButton")
+			{
+				GameManager.instance.resetGameplay();
+				ScreenManager.instance.gotoScreen(new TitleScreen(), true);
 			}
 		}
 		

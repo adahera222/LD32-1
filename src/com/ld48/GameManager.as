@@ -11,10 +11,10 @@ package com.ld48
 		
 		public static var TOTAL_NUM_PRESENTS:int = 8;
 		
-		private static var NUM_STARTING_XRAYS:int = 4;
-		private static var NUM_STARTING_SHAKES:int = 4;
-		private static var NUM_STARTING_WEIGHS:int = 4;
-		private static var NUM_STARTING_HINTS:int = 4;
+		private static var NUM_STARTING_XRAYS:int = 3;
+		private static var NUM_STARTING_SHAKES:int = 3;
+		private static var NUM_STARTING_WEIGHS:int = 3;
+		private static var NUM_STARTING_HINTS:int = 3;
 		
 		private var _numXRaysLeft:int;
 		public function get numXRaysLeft():int { return _numXRaysLeft; }
@@ -66,18 +66,18 @@ package com.ld48
 		{
 			availableToys = null;
 			availableToys = new Vector.<Toy>();
-			availableToys.push(new Toy("StuffedAnimal", Present.TYPE_SMALL));
-			availableToys.push(new Toy("Fedora", Present.TYPE_SMALL));
-			availableToys.push(new Toy("Underwear", Present.TYPE_SMALL));
-			availableToys.push(new Toy("BowlingBall", Present.TYPE_SMALL));
-			availableToys.push(new Toy("ElectricKeyboard", Present.TYPE_LONG));
-			availableToys.push(new Toy("LegoBox", Present.TYPE_LONG));
-			availableToys.push(new Toy("BongoDrums", Present.TYPE_LONG));
-			availableToys.push(new Toy("ChristmasSweater", Present.TYPE_LONG));
-			availableToys.push(new Toy("BaseballBat", Present.TYPE_TALL));
-			availableToys.push(new Toy("Umbrella", Present.TYPE_TALL));
-			availableToys.push(new Toy("Skateboard", Present.TYPE_TALL));
-			availableToys.push(new Toy("Rainstick", Present.TYPE_TALL));
+			availableToys.push(new Toy("StuffedAnimal", Present.TYPE_SMALL,45));
+			availableToys.push(new Toy("Fedora", Present.TYPE_SMALL,65));
+			availableToys.push(new Toy("Underwear", Present.TYPE_SMALL,35));
+			availableToys.push(new Toy("BowlingBall", Present.TYPE_SMALL,345));
+			availableToys.push(new Toy("ElectricKeyboard", Present.TYPE_LONG,270));
+			availableToys.push(new Toy("LegoBox", Present.TYPE_LONG,245));
+			availableToys.push(new Toy("BongoDrums", Present.TYPE_LONG,200));
+			availableToys.push(new Toy("ChristmasSweater", Present.TYPE_LONG,75));
+			availableToys.push(new Toy("BaseballBat", Present.TYPE_TALL,145));
+			availableToys.push(new Toy("Umbrella", Present.TYPE_TALL,110));
+			availableToys.push(new Toy("Skateboard", Present.TYPE_TALL,230));
+			availableToys.push(new Toy("Rainstick", Present.TYPE_TALL,75));
 			
 			_presents = null;
 			_presents = new Vector.<Present>();
@@ -87,6 +87,7 @@ package com.ld48
 				var present:Present = new Present(GameManager.instance.getControlledRandomPresentClass(), GameManager.instance.getRandomPresentColor(), "", i);
 				var toy:Toy = getRandomToyForType(present.type);
 				present.toy = toy.name;
+				present.weighRotation = toy.weighRotationAmount;
 				availableToys.splice(availableToys.indexOf(toy), 1);
 				addPresent(present);
 			}
@@ -124,7 +125,6 @@ package com.ld48
 		
 		private function onPresentOpened(e:GameEvent):void
 		{
-			//TODO:: check if we chose correctly
 			var present:Present = e.data as Present;
 			present.isOpened = true;
 			_presents.splice(_presents.indexOf(present), 1);
@@ -248,6 +248,10 @@ package com.ld48
 			return _presents[MathHelper.RandomInt(0, _presents.length - 1)].toy;
 		}
 		
+		public function gameWon():Boolean
+		{
+			return GameManager.instance.numPresentsOpened == GameManager.TOTAL_NUM_PRESENTS;
+		}
 	}
 
 }

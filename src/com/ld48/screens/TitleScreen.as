@@ -49,8 +49,13 @@ package com.ld48.screens
 			{
 				case "playButton":
 				{
-					ScreenManager.instance.gotoScreen(new GameplayScreen(),true);
-					//ScreenManager.instance.gotoScreen(new StoryScreen(),true);
+					//ScreenManager.instance.gotoScreen(new GameplayScreen(),true);
+					ScreenManager.instance.gotoScreen(new StoryScreen(),true);
+					break;
+				}
+				case "aboutButton":
+				{
+					ScreenManager.instance.gotoScreen(new AboutScreen(), true);
 					break;
 				}
 			}

@@ -1,4 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <strings>
+	<STUFFEDANIMAL_NAME>Angry Bird</STUFFEDANIMAL_NAME>
+	<STUFFEDANIMAL_WEIGH>Seems to be pretty light. Not much in here.</STUFFEDANIMAL_WEIGH>
+	<STUFFEDANIMAL_SHAKE>Did it... squak?</STUFFEDANIMAL_SHAKE>
+	<STUFFEDANIMAL_HINT>Watch out kiddo. The item in this box is pretty mean!</STUFFEDANIMAL_HINT>
+
+	<FEDORA_NAME>Fedora</FEDORA_NAME>
+	<FEDORA_WEIGH>Not too heavy..</FEDORA_WEIGH>
+	<FEDORA_SHAKE>Was that felt I heard flopping around in there?</FEDORA_SHAKE>
+	<FEDORA_HINT>This would go great with a neckbear kid.</FEDORA_HINT>
+
+	<UNDERWEAR_NAME>Underwear</UNDERWEAR_NAME>
+	<UNDERWEAR_WEIGH>Wow! This is pretty darn light!</UNDERWEAR_WEIGH>
+	<UNDERWEAR_SHAKE>Sounds like a rag is being thrown around</UNDERWEAR_SHAKE>
+	<UNDERWEAR_HINT>Everyone needs these kiddo. And I think they might even be clean!</UNDERWEAR_HINT>
+
+	<BOWLINGBALL_NAME>Bowling Ball</BOWLINGBALL_NAME>
+	<BOWLINGBALL_WEIGH>Woah. This is some heavy stuff</BOWLINGBALL_WEIGH>
+	<BOWLINGBALL_SHAKE>Somethings rolling around in here!</BOWLINGBALL_SHAKE>
+	<BOWLINGBALL_HINT>Damnit Donnie. Am I the only one around here who knows what's in these boxes?</BOWLINGBALL_HINT>
+
+	<ELECTRICKEYBOARD_NAME>Electric Keyboard</ELECTRICKEYBOARD_NAME>
+	<ELECTRICKEYBOARD_WEIGH>Pretty hefty!</ELECTRICKEYBOARD_WEIGH>
+	<ELECTRICKEYBOARD_SHAKE>Sounds like there are some plastic parts inside</ELECTRICKEYBOARD_SHAKE>
+	<ELECTRICKEYBOARD_HINT>You could join an indie band with this present!</ELECTRICKEYBOARD_HINT>
+
+	<LEGOBOX_NAME>Box o' Legos</LEGOBOX_NAME>
+	<LEGOBOX_WEIGH>Heavy as a ton of plastic bricks..</LEGOBOX_WEIGH>
+	<LEGOBOX_SHAKE>Lots of plastic parts are rattling around</LEGOBOX_SHAKE>
+	<LEGOBOX_HINT>Minecraft? Hah! Back in my day we used these instead</LEGOBOX_HINT>
+
+	<BONGODRUMS_NAME>Bongo Drums</BONGODRUMS_NAME>
+	<BONGODRUMS_WEIGH>Pretty light for the size of this present!</BONGODRUMS_WEIGH>
+	<BONGODRUMS_SHAKE>Was that wood I heard? What does wood even sound like?</BONGODRUMS_SHAKE>
+	<BONGODRUMS_HINT>Donkey Kong can play these like a champ.</BONGODRUMS_HINT>
+
+	<CHRISTMASSWEATER_NAME>Ugly Christmas Sweater</CHRISTMASSWEATER_NAME>
+	<CHRISTMASSWEATER_WEIGH>This is pretty light!</CHRISTMASSWEATER_WEIGH>
+	<CHRISTMASSWEATER_SHAKE>Well I'll be darned, sounded like some cloth is in there!</CHRISTMASSWEATER_SHAKE>
+	<CHRISTMASSWEATER_HINT>Your Grandma spent forever knitting this. At least pretend to like it.</CHRISTMASSWEATER_HINT>
+
+	<BASEBALLBAT_NAME>Baseball Bat</BASEBALLBAT_NAME>
+	<BASEBALLBAT_WEIGH>33 ounces! That's oddly specific..</BASEBALLBAT_WEIGH>
+	<BASEBALLBAT_SHAKE>Some wood is bouncing around in there.</BASEBALLBAT_SHAKE>
+	<BASEBALL_HINT>Swing for the fences kid.</BASEBALL_HINT>
+
+	<UMBRELLA_NAME>Umbrella</UMBRELLA_NAME>
+	<UMBRELLA_WEIGH>For a package this size.. it's light!</UMBRELLA_WEIGH>
+	<UMBRELLA_SHAKE>Sounds like a mix of fabric and wood is in there..</UMBRELLA_SHAKE>
+	<UMBRELLA_HINT>It's bad luck to use this present indoors.</UMBRELLA_HINT>
+
+	<SKATEBOARD_NAME>Skateboard</SKATEBOARD_NAME>
+	<SKATEBOARD_WEIGH>It's a few pounds. No big deal.</SKATEBOARD_WEIGH>
+	<SKATEBOARD_SHAKE>I heard some wheels rolling around in there!</SKATEBOARD_SHAKE>
+	<SKATEBOARD_HINT>This present is perfect for some empty pools.</SKATEBOARD_HINT>
+
+	<RAINSTICK_NAME>Rainstick</RAINSTICK_NAME>
+	<RAINSTICK_WEIGH>Really light!</RAINSTICK_WEIGH>
+	<RAINSTICK_SHAKE>Beads are bouncing around in something hollow!</RAINSTICK_SHAKE>
+	<RAINSTICK_HINT>You can (try) to bring the rain with this present!</RAINSTICK_HINT>
+
+	<XRAY_1>Nice! I can see right through the wrapping!</XRAY_1>
+	<XRAY_2>Wow, this is basically cheating!</XRAY_2>
+	<XRAY_3>When did we get an X-Ray machine? This is awesome!</XRAY_3>
+	<XRAY_4>Can I just have this X-Ray machine as my Christmas gift? ...no? Darn..</XRAY_4>
+	<XRAY_5>I don't think this is how X-Rays actually work... but whatever.</XRAY_5>
+	<XRAY_6>I'm starting to feel like the TSA..</XRAY_6>
+
+	<CORRECT_PRESENT_1>Way to go stud muffin! Another present is coming your way!</CORRECT_PRESENT_1>
+	<CORRECT_PRESENT_2>Nailed it! You're not cheating are you?</CORRECT_PRESENT_2>
+	<CORRECT_PRESENT_3>You got it champ!</CORRECT_PRESENT_3>
+	<CORRECT_PRESENT_4>Good guess! Or was it skill... nah you got lucky.</CORRECT_PRESENT_4>
+	<CORRECT_PRESENT_5>You feeling lucky punk? Because you are!</CORRECT_PRESENT_5>
+	<CORRECT_PRESENT_6>How'd you know what it was in there?!?!?!</CORRECT_PRESENT_6>
+	<CORRECT_PRESENT_7>Okay big shot, good work but let's see you do that again.</CORRECT_PRESENT_7>
+	<CORRECT_PRESENT_8>You got it right? What? Not too shabby.</CORRECT_PRESENT_8>
+	<CORRECT_PRESENT_9>Maybe your Christmas isn't ruined afterall. Way to go!</CORRECT_PRESENT_9>
+
+	<INCORRECT_PRESENT_1>Bwahahaha. Not even close kid. Better luck next year!</INCORRECT_PRESENT_1>
+	<INCORRECT_PRESENT_2>Ah well, there's always next year kiddo.</INCORRECT_PRESENT_2>
+	<INCORRECT_PRESENT_3>Wrong present! Too bad for you kiddo!</INCORRECT_PRESENT_3>
+	<INCORRECT_PRESENT_4>Oh, so close! There's no second place in life kid!</INCORRECT_PRESENT_4>
 
 </strings>
